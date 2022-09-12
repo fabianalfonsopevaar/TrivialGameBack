@@ -79,6 +79,7 @@ const getMaxScore = (questions) => {
 }
 
 io.on("connection", async (socket) => {
+  console.log("User connected ", socket.id)
   try {
     socket.on(Constants.CREATE_ROOM, async (data) => {
       let game = await Game.findOne({
