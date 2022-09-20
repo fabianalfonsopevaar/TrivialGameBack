@@ -236,6 +236,16 @@ io.on("connection", async (socket) => {
       }
     });
 
+    socket.on(Constants.RESET_ALL_INSTANCES, async (data) => {
+      await Game.destroy({
+        where: {},
+      });
+      await UsersByRoom.destroy({
+        where: {},
+      });
+      io.emit(Constants.RESET_ALL_INSTANCES_REDIRECT);
+    });
+
     socket.on("disconnect", async () => {
       let user = await UsersByRoom.findOne({
         where: { socketId: socket.id },
