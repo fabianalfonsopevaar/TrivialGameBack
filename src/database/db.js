@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize("sqlite::memory:",{logging: true}); // Example for sqlite
+const sequelize = new Sequelize("sqlite::memory:", { logging: false }); // Example for sqlite
 
 const GameModel = require("../models/GameModel");
 const UsersByRoomModel = require("../models/UsersByRoomModel");

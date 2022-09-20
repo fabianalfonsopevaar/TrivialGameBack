@@ -18,5 +18,13 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    finished: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    finishedDate: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 };

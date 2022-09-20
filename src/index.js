@@ -68,18 +68,18 @@ const getData = async (room_number, io) => {
 };
 
 const getMaxScore = (questions) => {
-  let rta = 0
-  if(questions){
-    questions.forEach(question => {
-      let score = Math.max(...question.answers.map(a => a.score))
-      rta += score
-    })
+  let rta = 0;
+  if (questions) {
+    questions.forEach((question) => {
+      let score = Math.max(...question.answers.map((a) => a.score));
+      rta += score;
+    });
   }
-  return rta
-}
+  return rta;
+};
 
 io.on("connection", async (socket) => {
-  console.log("User connected ", socket.id)
+  console.log("User connected ", socket.id);
   try {
     socket.on(Constants.CREATE_ROOM, async (data) => {
       let game = await Game.findOne({
@@ -93,7 +93,7 @@ io.on("connection", async (socket) => {
           startQuestion: 1,
           endQuestion: 20,
           questions: JSON.stringify(questions),
-          maxScore: getMaxScore(questions)
+          maxScore: getMaxScore(questions),
         });
         socket.emit(Constants.ROOM_CREATED, data);
         getData(data.room_number, io);
@@ -125,11 +125,51 @@ io.on("connection", async (socket) => {
         username: data.username,
         room_number: data.room_number,
         socketId: socket.id,
-        score: 0,//Math.floor(Math.random() * 100),
+        score: 0, //Math.floor(Math.random() * 100),
       });
 
       getData(data.room_number, io);
       socket.emit(Constants.USER_CONNECTED, data);
+    });
+    socket.on(Constants.DEFAULT_QUESTIONS, async (data) => {
+      try {
+        let room = await Game.findOne({
+          where: { room_number: data.room_number },
+        });
+
+        if (!room) {
+          socket.emit(Constants.ERROR, { error: "This room doesn't exist" });
+          return;
+        }
+        room.questions = JSON.stringify(questions);
+        room.maxScore = getMaxScore(questions);
+        await room.save();
+      } catch (error) {
+        socket.emit(Constants.ERROR, {
+          error: "There was an error updating the questions",
+        });
+      }
+      getData(data.room_number, io);
+    });
+    socket.on(Constants.UPDATE_QUESTIONS, async (data) => {
+      try {
+        let room = await Game.findOne({
+          where: { room_number: data.room_number },
+        });
+
+        if (!room) {
+          socket.emit(Constants.ERROR, { error: "This room doesn't exist" });
+          return;
+        }
+        room.questions = JSON.stringify(JSON.parse(data.questions));
+        room.maxScore = getMaxScore(JSON.parse(data.questions));
+        await room.save();
+      } catch (error) {
+        socket.emit(Constants.ERROR, {
+          error: "There was an error updating the questions",
+        });
+      }
+      getData(data.room_number, io);
     });
 
     socket.on(Constants.SEND_SCORE, async (data) => {
@@ -143,6 +183,18 @@ io.on("connection", async (socket) => {
       getData(data.room_number, io);
     });
 
+    socket.on(Constants.USER_FINISHED, async (data) => {
+      let user = await UsersByRoom.findOne({
+        where: { username: data.username },
+      });
+      if (user) {
+        user.finished = true;
+        user.finishedDate = new Date(Date.now()).toLocaleString();
+        await user.save();
+      }
+      getData(data.room_number, io);
+    });
+
     socket.on(Constants.RESET_GAME, async (data) => {
       const dbGameData = await Game.findOne({
         where: {
@@ -150,19 +202,27 @@ io.on("connection", async (socket) => {
         },
       });
       if (dbGameData) {
-
-        UsersByRoom.update({ score : 0 },{ where : { room_number : data.room_number }});
+        UsersByRoom.update(
+          { score: 0 },
+          { where: { room_number: data.room_number } }
+        );
 
         dbGameData.status = "STARTING";
         await dbGameData.save();
         getData(data.room_number, io);
       }
-      io.emit(Constants.RESET_GAME_ALL)
+      io.emit(Constants.RESET_GAME_ALL);
     });
 
     socket.on(Constants.ASK_DATA, async (data) => {
       getData(data.room_number, io);
     });
+
+    socket.on(Constants.GET_USERS, async (data) => {
+      const dbData = await UsersByRoom.findAll();
+      socket.emit(Constants.GET_USERS_DATA, dbData);
+    });
+
     socket.on(Constants.CHANGE_STATUS, async (data) => {
       const dbGameData = await Game.findOne({
         where: {

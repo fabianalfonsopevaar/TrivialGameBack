@@ -1,110 +1,63 @@
-module.exports = [
+[
   {
-    name: "Is this true? 1",
+    id: "ba62b5c8-64ae-4121-bf66-d818109ba3d0",
+    name: "This is a test question",
     answers: [
       {
-        answer: "Yes",
+        id: "891815fb-d2f6-481f-b6f6-bacb6dcdf4a8",
+        answer: "Test answer 1",
+        score: 1,
+      },
+      {
+        id: "37940975-39ef-4534-be3b-5a1c533cc34a",
+        answer: "Test answer 2",
         score: 10,
       },
       {
-        answer: "No",
-        score: 5,
-      },
-      {
-        answer: "Maybe",
+        id: "7d16129f-6583-4927-9b22-dcb3498dc96d",
+        answer: "Test answer 3",
         score: 3,
       },
       {
-        answer: "Who knows",
-        score: 1,
-      },
-    ],
-  },
-  {
-    name: "Area 51 is located in which US state? 2",
-    answers: [
-      {
-        answer: "Nevada",
-        score: 10,
-      },
-      {
-        answer: "Miami",
-        score: 5,
-      },
-      {
-        answer: "California",
-        score: 3,
-      },
-      {
-        answer: "Tijuana",
-        score: 1,
-      },
-    ],
-  },
-  {
-    name: "True or false? 3",
-    answers: [
-      {
-        answer: "Nevada",
-        score: 10,
-      },
-      {
-        answer: "Miami",
+        id: "4425c463-ab3c-4956-80b5-4b0d316009d9",
+        answer: "Test answer 4",
         score: 5,
       },
     ],
   },
   {
-    name: "Is this true? 4",
+    id: "ba62b5c8-64ae-4121-bf66-d818109ba3d0",
+    name: "This is a test question of true/false",
     answers: [
       {
-        answer: "Yes",
-        score: 10,
-      },
-      {
-        answer: "No",
-        score: 5,
-      },
-      {
-        answer: "Maybe",
-        score: 3,
-      },
-      {
-        answer: "Who knows",
+        id: "891815fb-d2f6-481f-b6f6-bacb6dcdf4a8",
+        answer: "True",
         score: 1,
+      },
+      {
+        id: "37940975-39ef-4534-be3b-5a1c533cc34a",
+        answer: "False",
+        score: 10,
       },
     ],
   },
   {
-    name: "Area 51 is located in which US state? 5",
+    id: "ba62b5c8-64ae-4121-bf66-d818109ba3d0",
+    name: "This is a test question with 3 answers",
     answers: [
       {
-        answer: "Nevada",
-        score: 10,
-      },
-      {
-        answer: "Miami",
-        score: 5,
-      },
-      {
-        answer: "California",
-        score: 3,
-      },
-      {
-        answer: "Tijuana",
+        id: "891815fb-d2f6-481f-b6f6-bacb6dcdf4a8",
+        answer: "Answer 1",
         score: 1,
       },
-    ],
-  },
-  {
-    name: "True or false? 6",
-    answers: [
       {
-        answer: "Nevada",
+        id: "37940975-39ef-4534-be3b-5a1c533cc34a",
+        answer: "Answer 2",
         score: 10,
       },
       {
-        answer: "Miami",
+        id: "37940975-39ef-4534-be3b-5a1c533cc34a",
+        answer: "Answer 3",
         score: 5,
       },
     ],
