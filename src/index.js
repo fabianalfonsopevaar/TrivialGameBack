@@ -120,6 +120,12 @@ io.on("connection", async (socket) => {
         socket.emit(Constants.ERROR, { error: "This room doesn't exist" });
         return;
       }
+      if(room.status !== "STARTING"){
+        socket.emit(Constants.ERROR, {
+          error: "This game is currently running, please wait",
+        });
+        return;
+      }
 
       await UsersByRoom.create({
         username: data.username,
@@ -203,7 +209,7 @@ io.on("connection", async (socket) => {
       });
       if (dbGameData) {
         UsersByRoom.update(
-          { score: 0 },
+          { score: 0, finished: false, finishedDAte: null },
           { where: { room_number: data.room_number } }
         );
 
@@ -244,6 +250,13 @@ io.on("connection", async (socket) => {
         where: {},
       });
       io.emit(Constants.RESET_ALL_INSTANCES_REDIRECT);
+    });
+
+    socket.on(Constants.LEAVE_ROOM, async (data) => {
+      await UsersByRoom.destroy({
+        where: {username: data.username },
+      });
+      getData(data.room_number, io)
     });
 
     socket.on("disconnect", async () => {
