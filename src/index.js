@@ -225,7 +225,9 @@ io.on("connection", async (socket) => {
     });
 
     socket.on(Constants.GET_USERS, async (data) => {
-      const dbData = await UsersByRoom.findAll();
+      const dbData = await UsersByRoom.findAll({
+        order: [["score", "DESC"],["finishedDate", "ASC"]],
+      });
       socket.emit(Constants.GET_USERS_DATA, dbData);
     });
 
